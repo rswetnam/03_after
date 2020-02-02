@@ -8,7 +8,7 @@ using Xunit;
 
 namespace DeskBooker.Core.Domain
 {
-    public class DeskBookingTests
+    public class DeskBookingTests  
     {
         private readonly DeskBookingRequest _request;
         private readonly List<Desk> _availableDesks;
