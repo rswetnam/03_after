@@ -1,19 +1,23 @@
 ﻿using DeskBooker.Core.DataInterface;
 using System;
+using System.Linq;
 
 namespace DeskBooker.Core.Domain
 {
     public class DeskBooking : DeskBookingBase
     {
         private readonly IDeskBookingRepository _deskBookingRepository;
+        private readonly IDeskRepository _deskRepository;
 
         public DeskBooking()
         {
         }
 
-        public DeskBooking(IDeskBookingRepository deskBookingRepository)
+        public DeskBooking(IDeskBookingRepository deskBookingRepository,
+            IDeskRepository deskRepository)
         {
             _deskBookingRepository = deskBookingRepository;
+            _deskRepository = deskRepository;
         }
 
 
@@ -32,7 +36,11 @@ namespace DeskBooker.Core.Domain
                 throw new ArgumentNullException(nameof(request));
             }
 
+            var availableDesks = _deskRepository.GetAvailableDesks(request.Date);
+
             var deskBooking = Create<DeskBooking>(request);
+
+            deskBooking.DeskId = availableDesks.First().Id;
 
             _deskBookingRepository.Save(deskBooking);
 
